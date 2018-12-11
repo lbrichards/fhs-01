@@ -2,8 +2,6 @@ import numpy
 from numpy import sign
 
 
-def f(x):
-    return x ** 2 - 4
 
 
 def bisect(f, x_left, x_right):
