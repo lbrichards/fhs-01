@@ -31,11 +31,15 @@ def main(my_postcode):
     
     
 def calc_xyz(df):
-    df['xyz'] = df.apply(
-        lambda row: lat_lon_to_xyz(
-            row.Lat, row.Long), axis = 1)
+    # df['xyz'] = df.apply(
+    #    lambda row: lat_lon_to_xyz(
+    #        row.Lat, row.Long), axis = 1)
     
-    df['x'], df['y'], df['z'] =list(zip(*((x[0], x[1], x[2]) for x in df['xyz'].values)))
+    df['x'], df['y'], df['z'] = list(zip(*(df.apply(
+        lambda row: lat_lon_to_xyz(
+            row.Lat, row.Long), axis = 1))))    
+    
+    # df['x'], df['y'], df['z'] =list(zip(*((x[0], x[1], x[2]) for x in df['xyz'].values)))
     
     # print(df[['x', 'y', 'z']])
     
@@ -50,8 +54,11 @@ def calc_dist(df, reference_postcode):
     df['distance'] = df.apply(lambda row: distance(x1, y1, z1, row.x, row.y, row.z),
                               axis = 1)
     df = df.sort_values(by = 'distance')
-    print(df.columns)
-    print(df[['address', 'distance']])
+    df = df[df.distance == df.distance.max()]
+    print(df.address, df.admin_name3, df.postcode)
+    # print(df.columns)
+    # print(df[['admin_name3', 'address', 'distance']])
+    
     
     
     
